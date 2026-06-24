@@ -1,4 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize fold variables at the top to share across handlers
+    const totalFolds = 5;
+    const labels = [];
+    const images = [];
+
+    for (let i = 1; i <= totalFolds; i++) {
+        images[i] = document.getElementById(`img-fold-${i}`);
+        labels[i] = document.getElementById(`img-fold-${i}-label`);
+    }
+
+    // Helper to hide a fold container and info box smoothly
+    function hideFold(index) {
+        const label = labels[index];
+        const infoBox = document.getElementById(`img-fold-${index}-info-box`);
+        if (!label) return;
+
+        if (label.classList.contains('show')) {
+            label.classList.remove('show');
+            label.classList.add('hide');
+            
+            if (infoBox && infoBox.classList.contains('show')) {
+                infoBox.classList.remove('show');
+                infoBox.classList.add('hide');
+            }
+
+            const currentLabel = label;
+            const currentInfoBox = infoBox;
+            setTimeout(() => {
+                if (currentLabel.classList.contains('hide')) {
+                    currentLabel.classList.remove('hide');
+                    currentLabel.style.bottom = '';
+                    currentLabel.style.top = '';
+                }
+                if (currentInfoBox && currentInfoBox.classList.contains('hide')) {
+                    currentInfoBox.classList.remove('hide');
+                }
+            }, 500);
+        }
+    }
     // ==========================================================================
     // 1. Dropdown Menu Toggle
     // ==========================================================================
@@ -21,18 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close active info boxes when clicking outside gallery image buttons
         if (!e.target.closest('.gallery-item')) {
-            const totalFolds = 5;
             for (let j = 1; j <= totalFolds; j++) {
-                const label = document.getElementById(`img-fold-${j}-label`);
-                const infoBox = document.getElementById(`img-fold-${j}-info-box`);
-                if (label && label.classList.contains('show')) {
-                    label.classList.remove('show');
-                    label.classList.add('hide');
-                }
-                if (infoBox && infoBox.classList.contains('show')) {
-                    infoBox.classList.remove('show');
-                    infoBox.classList.add('hide');
-                }
+                hideFold(j);
             }
         }
     });
@@ -172,14 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 4. Image Button Click Rotation and Label Interactions (All 5 buttons)
     // ==========================================================================
-    const totalFolds = 5;
-    const labels = [];
-    const images = [];
-
-    for (let i = 1; i <= totalFolds; i++) {
-        images[i] = document.getElementById(`img-fold-${i}`);
-        labels[i] = document.getElementById(`img-fold-${i}-label`);
-    }
 
     function isOverlapping(rect1, rect2) {
         return !(rect1.right < rect2.left || 
@@ -235,38 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Toggle show/hide of the label container and info box with mutual exclusivity
                 if (label.classList.contains('show')) {
-                    label.classList.remove('show');
-                    label.classList.add('hide');
-                    if (infoBox) {
-                        infoBox.classList.remove('show');
-                        infoBox.classList.add('hide');
-                    }
-                    // Wait for 500ms transition to finish before resetting style to avoid position jump
-                    const currentLabel = label;
-                    setTimeout(() => {
-                        if (currentLabel.classList.contains('hide')) {
-                            currentLabel.style.bottom = '';
-                        }
-                    }, 500);
+                    hideFold(i);
                 } else {
                     // Hide all other labels and info boxes first
                     for (let j = 1; j <= totalFolds; j++) {
-                        const otherLabel = labels[j];
-                        if (j !== i && otherLabel && otherLabel.classList.contains('show')) {
-                            otherLabel.classList.remove('show');
-                            otherLabel.classList.add('hide');
-                            
-                            const otherInfoBox = document.getElementById(`img-fold-${j}-info-box`);
-                            if (otherInfoBox) {
-                                otherInfoBox.classList.remove('show');
-                                otherInfoBox.classList.add('hide');
-                            }
-                            
-                            setTimeout(() => {
-                                if (otherLabel.classList.contains('hide')) {
-                                    otherLabel.style.bottom = '';
-                                }
-                            }, 500);
+                        if (j !== i) {
+                            hideFold(j);
                         }
                     }
                     label.classList.remove('hide');

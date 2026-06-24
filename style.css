@@ -854,7 +854,10 @@ body {
 
     .gallery-item-wrapper:has(.info-box-bottom.show) .label-container.show,
     .gallery-item-wrapper:has(.info-box-left.show) .label-container.show,
-    #wrapper-fold-5 .label-container.show {
+    .gallery-item-wrapper:has(.info-box-bottom.hide) .label-container.hide,
+    .gallery-item-wrapper:has(.info-box-left.hide) .label-container.hide,
+    #wrapper-fold-5 .label-container.show,
+    #wrapper-fold-5 .label-container.hide {
         position: fixed;
         left: 50%;
         transform: translate(-50%, 0);
@@ -863,15 +866,18 @@ body {
         margin-bottom: 0;
     }
 
-    .gallery-item-wrapper:has(#img-fold-1-info-box.show) .label-container.show {
+    .gallery-item-wrapper:has(#img-fold-1-info-box.show) .label-container.show,
+    .gallery-item-wrapper:has(#img-fold-1-info-box.hide) .label-container.hide {
         bottom: calc(50% + 78px);
     }
 
-    .gallery-item-wrapper:has(#img-fold-2-info-box.show) .label-container.show {
+    .gallery-item-wrapper:has(#img-fold-2-info-box.show) .label-container.show,
+    .gallery-item-wrapper:has(#img-fold-2-info-box.hide) .label-container.hide {
         bottom: calc(50% + 75px);
     }
 
-    .gallery-item-wrapper:has(#img-fold-3-info-box.show) .label-container.show {
+    .gallery-item-wrapper:has(#img-fold-3-info-box.show) .label-container.show,
+    .gallery-item-wrapper:has(#img-fold-3-info-box.hide) .label-container.hide {
         bottom: calc(50% + 86px);
     }
 
