@@ -241,20 +241,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         infoBox.classList.remove('show');
                         infoBox.classList.add('hide');
                     }
-                    label.style.bottom = '';
+                    // Wait for 500ms transition to finish before resetting style to avoid position jump
+                    const currentLabel = label;
+                    setTimeout(() => {
+                        if (currentLabel.classList.contains('hide')) {
+                            currentLabel.style.bottom = '';
+                        }
+                    }, 500);
                 } else {
                     // Hide all other labels and info boxes first
                     for (let j = 1; j <= totalFolds; j++) {
-                        if (j !== i && labels[j] && labels[j].classList.contains('show')) {
-                            labels[j].classList.remove('show');
-                            labels[j].classList.add('hide');
-                            labels[j].style.bottom = '';
+                        const otherLabel = labels[j];
+                        if (j !== i && otherLabel && otherLabel.classList.contains('show')) {
+                            otherLabel.classList.remove('show');
+                            otherLabel.classList.add('hide');
                             
                             const otherInfoBox = document.getElementById(`img-fold-${j}-info-box`);
                             if (otherInfoBox) {
                                 otherInfoBox.classList.remove('show');
                                 otherInfoBox.classList.add('hide');
                             }
+                            
+                            setTimeout(() => {
+                                if (otherLabel.classList.contains('hide')) {
+                                    otherLabel.style.bottom = '';
+                                }
+                            }, 500);
                         }
                     }
                     label.classList.remove('hide');
