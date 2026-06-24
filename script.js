@@ -204,6 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         const infoBoxHeight = infoBox.offsetHeight;
                         const offset = (infoBoxHeight * 0.36) + 5;
                         label.style.bottom = `calc(50% + ${offset}px)`;
+                    } else {
+                        // For folds without info-boxes (like 4 and 5), place above the gallery (clearing row 1)
+                        label.style.bottom = 'calc(50% + 140px)';
                     }
 
                     if (activePanel) {

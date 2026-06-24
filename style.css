@@ -852,8 +852,7 @@ body {
 @media (max-width: 768px),
 (max-height: 780px) {
 
-    .gallery-item-wrapper:has(.info-box-bottom.show) .label-container.show,
-    .gallery-item-wrapper:has(.info-box-left.show) .label-container.show {
+    .gallery-item-wrapper .label-container.show {
         position: fixed;
         left: 50%;
         transform: translate(-50%, 0);
