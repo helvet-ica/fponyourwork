@@ -852,25 +852,27 @@ body {
 @media (max-width: 768px),
 (max-height: 780px) {
 
-    .gallery-item-wrapper .label-container.show {
+    .gallery-item-wrapper:has(.info-box-bottom.show) .label-container.show,
+    .gallery-item-wrapper:has(.info-box-left.show) .label-container.show,
+    #wrapper-fold-5 .label-container.show {
         position: fixed;
         left: 50%;
         transform: translate(-50%, 0);
         top: auto;
-        z-index: 110;
+        z-index: 60;
         margin-bottom: 0;
     }
 
     .gallery-item-wrapper:has(#img-fold-1-info-box.show) .label-container.show {
-        bottom: calc(50% + 140px);
+        bottom: calc(50% + 78px);
     }
 
     .gallery-item-wrapper:has(#img-fold-2-info-box.show) .label-container.show {
-        bottom: calc(50% + 130px);
+        bottom: calc(50% + 75px);
     }
 
     .gallery-item-wrapper:has(#img-fold-3-info-box.show) .label-container.show {
-        bottom: calc(50% + 150px);
+        bottom: calc(50% + 86px);
     }
 
     #img-fold-1-info-box {

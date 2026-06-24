@@ -194,20 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         for (let i = 1; i <= totalFolds; i++) {
             const label = labels[i];
-            const infoBox = document.getElementById(`img-fold-${i}-info-box`);
             if (label && label.classList.contains('show')) {
                 label.style.bottom = '';
                 label.style.top = '';
 
-                if (isMobile) {
-                    if (infoBox && infoBox.classList.contains('show')) {
-                        const infoBoxHeight = infoBox.offsetHeight;
-                        const offset = (infoBoxHeight * 0.36) + 5;
-                        label.style.bottom = `calc(50% + ${offset}px)`;
-                    } else {
-                        // For folds without info-boxes (like 4 and 5), place above the gallery (clearing row 1)
-                        label.style.bottom = 'calc(50% + 140px)';
-                    }
+                // 오로지 그리고 라벨(i === 5)만 수정안을 유지하고 다른 라벨은 기존 CSS안을 따름
+                if (i === 5 && isMobile) {
+                    label.style.bottom = 'calc(50% + 140px)';
 
                     if (activePanel) {
                         const labelRect = label.getBoundingClientRect();
