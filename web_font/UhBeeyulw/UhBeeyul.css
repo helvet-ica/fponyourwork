@@ -1,0 +1,5 @@
+/* 어비폰트 - 웹폰트 설정영역 */
+@font-face {font-family: 'UhBeeyul';src: url('UhBeeyul.eot');}
+@font-face {font-family: 'UhBeeyul';src: url('UhBeeyul.woff') format('woff');}
+article { font-family: "UhBeeyul", serif;}
+textarea  {font-family: "UhBeeyul", serif; }

@@ -1,0 +1,891 @@
+/* ==========================================================================
+   1. Import Fonts & Setup Font-Face
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;700&display=swap');
+
+:root {
+    --wrapper-width: 150px;
+    --wrapper-height: 220px;
+    --image-width: 150px;
+    --gallery-gap: 20px;
+    --label-font-size-ko: 30px;
+    --label-font-size-en: 20px;
+    --label-margin-bottom: 25px;
+    --info-box-width: 280px;
+}
+
+@font-face {
+    font-family: 'UhBeeyul';
+    src: url('web_font/UhBeeyulw/UhBeeyul.eot');
+    src: url('web_font/UhBeeyulw/UhBeeyul.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ==========================================================================
+   2. Reset & Global Styles
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 35px;
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    /* Fit all components within a single viewport, preventing scrollbars */
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling for a minimalist look */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}
+
+/* ==========================================================================
+   3. Sidebar Menu Layout
+   ========================================================================== */
+.menu-container {
+    position: fixed;
+    top: 60px;
+    left: 60px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Main Menu Button */
+.menu-btn {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 35px;
+    font-weight: normal;
+    color: #000000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: 170px;
+    text-align: left;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 60px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.menu-btn .english-text {
+    display: none;
+}
+
+.menu-btn .korean-text {
+    display: block;
+    white-space: nowrap;
+}
+
+/* Main Menu Hover State */
+.menu-btn:hover {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    /* Light weight */
+    width: 150px;
+    height: 33px;
+    line-height: 1;
+    padding: 2px;
+    margin: 0;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.menu-btn:hover .korean-text {
+    display: none;
+}
+
+.menu-btn:hover .english-text {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Sub-Menu Container */
+.submenu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+    list-style: none;
+    padding: 0;
+    width: max-content;
+    min-width: 150px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.submenu-container.open {
+    opacity: 1;
+    max-height: 600px;
+    overflow: visible;
+}
+
+/* Sub-Menu Buttons */
+.submenu-btn {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 25px;
+    color: #000000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: 120px;
+    text-align: left;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 45px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.submenu-btn .english-text {
+    display: none;
+}
+
+.submenu-btn .korean-text {
+    display: block;
+    white-space: nowrap;
+}
+
+/* Sub-Menu Hover State */
+.submenu-btn:hover {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    /* Light weight */
+    width: max-content;
+    height: max-content;
+    padding: 2px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    box-sizing: border-box;
+}
+
+.submenu-btn:hover .korean-text {
+    display: none;
+}
+
+.submenu-btn:hover .english-text {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+/* ==========================================================================
+   4. Center Display Elements (Gallery & Text Panels)
+   ========================================================================== */
+.center-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 95vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.center-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -48%) scale(0.98);
+}
+
+/* Horizontally Centered Image Gallery */
+.gallery {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* Rearrange dynamically on small screens */
+    gap: var(--gallery-gap);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.gallery-item {
+    width: var(--image-width);
+    height: auto;
+    cursor: default;
+    object-fit: contain;
+    border: none;
+}
+
+.gallery-item:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+#wrapper-fold-5 {
+    margin-left: -15px;
+    /* Shift the wrapper of img-fold-5 slightly to the left */
+}
+
+/* Text Content Panels */
+.content-panel {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -47%);
+    width: 650px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 100;
+    box-sizing: border-box;
+    padding: 20px 10px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.content-panel.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.panel-body {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 26px;
+    line-height: 1.8;
+    color: #333333;
+    text-align: left;
+}
+
+/* Header style for panels */
+.panel-title {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 42px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 12px;
+}
+
+.panel-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.panel-list li {
+    margin-bottom: 25px;
+}
+
+.panel-list li strong {
+    font-size: 29px;
+    color: #000000;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Custom styled text lines for identity page */
+.identity-text p {
+    margin-bottom: 20px;
+}
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    color: #000000;
+    text-decoration: none;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
+}
+
+.instagram-link:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.instagram-btn-link {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.instagram-btn-link:hover {
+    transform: scale(1.15);
+}
+
+/* Are.na connection card */
+.arena-card {
+    border: 2px solid #000000;
+    padding: 40px;
+    text-align: center;
+    background-color: #ffffff;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.arena-card:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.arena-link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.arena-desc {
+    font-size: 22px;
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   5. Fullscreen Lightbox Modal
+   ========================================================================= */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.97);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 85vw;
+    max-height: 85vh;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.08);
+    transform: scale(0.96);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    object-fit: contain;
+    border: 1px solid #f0f0f0;
+}
+
+.lightbox.active .lightbox-content {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    font-size: 45px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 200;
+    color: #000000;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-close:hover {
+    transform: rotate(90deg);
+}
+
+/* Small Back-to-Gallery link for content pages */
+.back-home-btn {
+    display: inline-block;
+    margin-top: 35px;
+    font-size: 22px;
+    color: #888888;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.back-home-btn:hover {
+    color: #000000;
+}
+
+/* ==========================================================================
+   6. Image Button & Labels for Gallery Interactions
+   ========================================================================== */
+.gallery-item-wrapper {
+    position: relative;
+    width: var(--wrapper-width);
+    height: var(--wrapper-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    /* Force items to wrap instead of shrinking */
+}
+
+#img-fold-1,
+#img-fold-2,
+#img-fold-3,
+#img-fold-4,
+#img-fold-5 {
+    cursor: pointer;
+}
+
+.label-container {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 15px);
+    margin-bottom: var(--label-margin-bottom);
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.label-container .korean-label {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: var(--label-font-size-ko);
+    color: #000000;
+    line-height: 1.2;
+}
+
+.label-container .english-label {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: var(--label-font-size-en);
+    color: #000000;
+    line-height: 1.0;
+    margin-top: 5px;
+    /* gap between Korean and English text */
+}
+
+.label-container .english-label+.english-label {
+    margin-top: 1px;
+    /* reduce spacing between consecutive english lines */
+}
+
+@keyframes slideUpFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.label-container.show {
+    animation: slideUpFadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slideDownFadeOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+    }
+}
+
+.label-container.hide {
+    animation: slideDownFadeOut 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes rotate360Horizontally {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.rotate-360-horizontal {
+    animation: rotate360Horizontally 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ==========================================================================
+   7. Info Box (Description Box on Click)
+   ========================================================================== */
+.info-box-left {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translate(-30px, -50%);
+    margin-right: 35px;
+    width: var(--info-box-width);
+    height: auto;
+    min-height: 200px;
+    padding: 20px 15px;
+    /* Minimum 15px margins inside box */
+    border-top: 1.5px dotted #000000;
+    border-bottom: 1.5px dotted #000000;
+    border-left: none;
+    border-right: none;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 50;
+}
+
+.info-box-left.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(0, -50%);
+    /* slide in */
+}
+
+.info-box-left.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-30px, -50%);
+    /* slide out */
+}
+
+.info-box-content {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 200;
+    /* Extra Light */
+    font-size: 16px;
+    color: #000000;
+    line-height: 1.8;
+    word-break: keep-all;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-header-ko {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 35px;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    color: #000000;
+}
+
+.info-header-en {
+    font-family: 'UhBeeyul', sans-serif;
+    font-size: 15px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+.info-box-bottom {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    margin-top: 20px;
+    width: var(--info-box-width);
+    height: auto;
+    min-height: 200px;
+    padding: 20px 15px;
+    /* Minimum 15px margins inside box */
+    border-top: 1.5px dotted #000000;
+    border-bottom: 1.5px dotted #000000;
+    border-left: none;
+    border-right: none;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 50;
+}
+
+.info-box-bottom.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+}
+
+.info-box-bottom.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 20px);
+}
+
+.info-details-list {
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.6;
+    width: 100%;
+    margin-top: 10px;
+    word-break: keep-all;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+}
+
+.detail-label {
+    font-weight: bold;
+    width: 75px;
+    flex-shrink: 0;
+    color: #000000;
+}
+
+.detail-value {
+    flex-grow: 1;
+    color: #000000;
+}
+
+#img-fold-3-info-box {
+    width: calc(var(--info-box-width) * 1.5);
+    max-width: 90vw;
+    min-height: auto;
+    padding: 10px 15px;
+}
+
+#img-fold-3-info-box .info-details-list {
+    margin-top: 6px;
+    gap: 4px;
+}
+
+/* ==========================================================================
+   8. Responsive Design & Layout Scaling
+   ========================================================================== */
+@media (max-width: 1199px) {
+    :root {
+        --wrapper-width: 110px;
+        --wrapper-height: 170px;
+        --image-width: 110px;
+        --gallery-gap: 15px;
+        --label-font-size-ko: 24px;
+        --label-font-size-en: 16px;
+        --label-margin-bottom: 20px;
+        --info-box-width: 220px;
+    }
+
+    .info-box-content {
+        font-size: 14px;
+    }
+
+    .info-details-list {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 769px) {
+
+    .info-box-left,
+    .info-box-bottom {
+        right: auto;
+        left: 50%;
+        top: 100%;
+        margin-right: 0;
+        margin-top: 20px;
+        transform: translate(-50%, 20px);
+        min-height: 170px;
+    }
+
+    .info-box-left.show,
+    .info-box-bottom.show {
+        transform: translate(-50%, 0);
+    }
+
+    .info-box-left.hide,
+    .info-box-bottom.hide {
+        transform: translate(-50%, 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --wrapper-width: 80px;
+        --wrapper-height: 120px;
+        --image-width: 80px;
+        --gallery-gap: 10px;
+        --label-font-size-ko: 18px;
+        --label-font-size-en: 12px;
+        --label-margin-bottom: 12px;
+        --info-box-width: 260px;
+    }
+
+    .info-box-left,
+    .info-box-bottom {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        margin-right: 0;
+    }
+
+    .info-box-left.show,
+    .info-box-bottom.show {
+        transform: translate(-50%, -36%);
+    }
+
+    .info-box-left.hide,
+    .info-box-bottom.hide {
+        transform: translate(-50%, -40%);
+    }
+
+    .info-box-content {
+        font-size: 15px;
+    }
+
+    .info-details-list {
+        font-size: 12px;
+    }
+}
+
+@media (max-height: 780px) {
+
+    .info-box-left,
+    .info-box-bottom {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        margin-right: 0;
+        margin-top: 0;
+    }
+
+    .info-box-left.show,
+    .info-box-bottom.show {
+        transform: translate(-50%, -36%);
+    }
+
+    .info-box-left.hide,
+    .info-box-bottom.hide {
+        transform: translate(-50%, -40%);
+    }
+}
+
+@media (max-width: 768px),
+(max-height: 780px) {
+
+    .gallery-item-wrapper:has(.info-box-bottom.show) .label-container.show,
+    .gallery-item-wrapper:has(.info-box-left.show) .label-container.show {
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, 0);
+        top: auto;
+        z-index: 110;
+        margin-bottom: 0;
+    }
+
+    .gallery-item-wrapper:has(#img-fold-1-info-box.show) .label-container.show {
+        bottom: calc(50% + 140px);
+    }
+
+    .gallery-item-wrapper:has(#img-fold-2-info-box.show) .label-container.show {
+        bottom: calc(50% + 130px);
+    }
+
+    .gallery-item-wrapper:has(#img-fold-3-info-box.show) .label-container.show {
+        bottom: calc(50% + 150px);
+    }
+
+    #img-fold-1-info-box {
+        min-height: auto;
+        padding: 10px 15px;
+    }
+
+    #img-fold-1-info-box .info-box-content {
+        line-height: 1.4;
+    }
+
+    .content-panel.active {
+        top: 10%;
+        transform: translate(-50%, 0);
+        max-height: 85vh;
+    }
+}
