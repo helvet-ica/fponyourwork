@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetElement.classList.add('active');
             }
             activePanelKey = targetKey;
+            
+            // Recalculate label positions when view changes
+            updateLabelPositions();
         }, 300);
     }
 
@@ -178,21 +181,44 @@ document.addEventListener('DOMContentLoaded', () => {
         labels[i] = document.getElementById(`img-fold-${i}-label`);
     }
 
+    function isOverlapping(rect1, rect2) {
+        return !(rect1.right < rect2.left || 
+                 rect1.left > rect2.right || 
+                 rect1.bottom < rect2.top || 
+                 rect1.top > rect2.bottom);
+    }
+
     function updateLabelPositions() {
         const isMobile = window.innerWidth <= 768 || window.innerHeight <= 780;
+        const activePanel = document.querySelector('.content-panel.active');
+        
         for (let i = 1; i <= totalFolds; i++) {
             const label = labels[i];
             const infoBox = document.getElementById(`img-fold-${i}-info-box`);
-            if (label && infoBox && label.classList.contains('show')) {
+            if (label && label.classList.contains('show')) {
+                label.style.bottom = '';
+                label.style.top = '';
+
                 if (isMobile) {
-                    const infoBoxHeight = infoBox.offsetHeight;
-                    const offset = (infoBoxHeight * 0.36) + 5;
-                    label.style.bottom = `calc(50% + ${offset}px)`;
-                } else {
-                    label.style.bottom = '';
+                    if (infoBox && infoBox.classList.contains('show')) {
+                        const infoBoxHeight = infoBox.offsetHeight;
+                        const offset = (infoBoxHeight * 0.36) + 5;
+                        label.style.bottom = `calc(50% + ${offset}px)`;
+                    }
+
+                    if (activePanel) {
+                        const labelRect = label.getBoundingClientRect();
+                        const panelRect = activePanel.getBoundingClientRect();
+                        
+                        if (isOverlapping(labelRect, panelRect)) {
+                            label.style.bottom = 'auto';
+                            label.style.top = '10px';
+                        }
+                    }
                 }
             } else if (label) {
                 label.style.bottom = '';
+                label.style.top = '';
             }
         }
     }
